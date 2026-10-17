@@ -3,163 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الحاسبة التجارية الذكية</title>
+    <title>حاسبة التاجر | شركة المتوكل</title>
+    <!-- Telegram Mini App WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        :root {
+            --bg-color: var(--tg-theme-bg-color, #f8f9fa);
+            --text-color: var(--tg-theme-text-color, #212529);
+            --card-bg: var(--tg-theme-secondary-bg-color, #ffffff);
+            --primary-color: var(--tg-theme-button-color, #1f6feb);
+            --primary-text: var(--tg-theme-button-text-color, #ffffff);
+            --hint-color: var(--tg-theme-hint-color, #6c757d);
+            --border-color: #e9ecef;
+        }
+
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--tg-theme-bg-color, #f5f5f5);
-            color: var(--tg-theme-text-color, #222);
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
             padding: 16px;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
+
         .container {
-            max-width: 400px;
-            margin: auto;
-            background: var(--tg-theme-secondary-bg-color, #fff);
+            max-width: 420px;
+            margin: 0 auto;
+            background: var(--card-bg);
             padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border-color);
         }
+
         h2 {
             text-align: center;
             font-size: 20px;
-            margin-bottom: 20px;
-            color: var(--tg-theme-button-color, #2481cc);
+            margin-top: 0;
+            margin-bottom: 18px;
+            color: var(--primary-color);
+            font-weight: 700;
         }
+
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
+
         label {
             display: block;
             margin-bottom: 6px;
-            font-size: 14px;
-            font-weight: bold;
+            font-size: 13px;
+            font-weight: 600;
         }
+
         input {
             width: 100%;
-            padding: 10px;
+            padding: 11px 14px;
             box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 16px;
-            background: inherit;
-            color: inherit;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            outline: none;
+            transition: border-color 0.2s ease;
         }
+
+        input:focus {
+            border-color: var(--primary-color);
+        }
+
         button {
             width: 100%;
-            background-color: var(--tg-theme-button-color, #2481cc);
-            color: var(--tg-theme-button-text-color, #fff);
+            background-color: var(--primary-color);
+            color: var(--primary-text);
             border: none;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 13px;
+            border-radius: 10px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
             margin-top: 10px;
+            transition: opacity 0.2s ease;
         }
+
+        button:active {
+            opacity: 0.85;
+        }
+
         .result {
             margin-top: 20px;
-            padding: 12px;
-            background: rgba(36, 129, 204, 0.1);
-            border-radius: 8px;
+            padding: 14px;
+            background: rgba(31, 111, 235, 0.08);
+            border-radius: 10px;
             font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.7;
             display: none;
+            border-right: 4px solid var(--primary-color);
         }
+
         .result p {
             margin: 6px 0;
         }
+
         .footer-sponsor {
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px dashed #ccc;
+            margin-top: 22px;
+            padding-top: 14px;
+            border-top: 1px dashed var(--border-color);
             text-align: center;
             font-size: 13px;
-            color: var(--tg-theme-hint-color, #666);
+            color: var(--hint-color);
         }
+
         .footer-sponsor a {
-            color: var(--tg-theme-link-color, #2481cc);
+            color: var(--primary-color);
             text-decoration: none;
             font-weight: bold;
-        }
-        .footer-sponsor a:hover {
-            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>حاسبة التسعير التجارية</h2>
+    <h2>حاسبة التكلفة والربح</h2>
     
     <div class="form-group">
-        <label>سعر شراء الوحدة:</label>
-        <input type="number" id="price" placeholder="أدخل السعر">
+        <label for="price">سعر شراء الوحدة / الطن:</label>
+        <input type="number" id="price" placeholder="أدخل سعر الشراء" inputmode="decimal">
     </div>
 
     <div class="form-group">
-        <label>الكمية:</label>
-        <input type="number" id="quantity" placeholder="أدخل الكمية">
+        <label for="quantity">الكمية الإجمالية:</label>
+        <input type="number" id="quantity" placeholder="أدخل عدد الوحدات أو الأطنان" inputmode="decimal">
     </div>
 
     <div class="form-group">
-        <label>تكلفة التوصيل والشحن الإجمالية:</label>
-        <input type="number" id="delivery" placeholder="أدخل التكلفة">
+        <label for="delivery">تكلفة النقل والشحن الإجمالية:</label>
+        <input type="number" id="delivery" placeholder="أدخل تكلفة النقل" inputmode="decimal">
     </div>
 
     <div class="form-group">
-        <label>مصروفات أخرى (عمالة، تحميل...):</label>
-        <input type="number" id="other" placeholder="أدخل المصروفات">
+        <label for="other">مصروفات أخرى (عمالة، مشال، عتق):</label>
+        <input type="number" id="other" placeholder="أدخل أي مصروفات إضافية" inputmode="decimal">
     </div>
 
     <div class="form-group">
-        <label>نسبة الربح المطلوبة (%):</label>
-        <input type="number" id="profitMargin" placeholder="مثال: 15">
+        <label for="profitMargin">نسبة الربح المطلوبة (%):</label>
+        <input type="number" id="profitMargin" placeholder="مثال: 10" inputmode="decimal">
     </div>
 
-    <button onclick="calculate()">حساب التكلفة والسعر النهائي</button>
+    <button type="button" onclick="calculate()">حساب التكلفة والسعر النهائي</button>
 
     <div class="result" id="resultBox">
         <p>• إجمالي التكلفة الشاملة: <strong id="resTotalCost">0</strong></p>
-        <p>• التكلفة الفعلية للوحدة: <strong id="resUnitCost">0</strong></p>
-        <p>• 💰 <strong>سعر البيع النهائي:</strong> <strong id="resFinalPrice" style="color: #2481cc;">0</strong></p>
-        <p>• ربح الوحدة الواحدة: <strong id="resUnitProfit">0</strong></p>
+        <p>• التكلفة الفعلية للوحدة / الطن: <strong id="resUnitCost">0</strong></p>
+        <p>• 💰 <strong>سعر البيع المقترح للوحدة:</strong> <strong id="resFinalPrice" style="color: var(--primary-color);">0</strong></p>
+        <p>• صافي ربح الوحدة / الطن: <strong id="resUnitProfit">0</strong></p>
         <p>• إجمالي الربح المتوقع للكمية: <strong id="resTotalProfit">0</strong></p>
     </div>
 
     <div class="footer-sponsor">
-        برعاية: <a href="https://t.me/AbuObeidaFeeds" target="_blank" onclick="openLink(event, 'https://t.me/AbuObeidaFeeds')">@AbuObeidaFeeds</a>
+        برعاية: <a href="https://t.me/AbuObeidaFeeds" id="sponsorLink">@AbuObeidaFeeds</a>
     </div>
 </div>
 
 <script>
-    let tg = window.Telegram.WebApp;
-    tg.expand();
-
-    function openLink(event, url) {
-        if (tg && tg.openTelegramLink) {
-            event.preventDefault();
-            tg.openTelegramLink(url);
-        }
+    // تهيئة تطبيق تليجرام المصغر
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+        tg.ready();
+        tg.expand();
     }
 
+    // فتح رابط القناة عبر تليجرام مباشرة بشكل آمن
+    document.getElementById('sponsorLink').addEventListener('click', function(e) {
+        e.preventDefault();
+        const channelUrl = 'https://t.me/AbuObeidaFeeds';
+        if (tg && tg.openTelegramLink) {
+            tg.openTelegramLink(channelUrl);
+        } else {
+            window.open(channelUrl, '_blank');
+        }
+    });
+
     function calculate() {
-        let price = parseFloat(document.getElementById('price').value) || 0;
-        let quantity = parseFloat(document.getElementById('quantity').value) || 1;
-        let delivery = parseFloat(document.getElementById('delivery').value) || 0;
-        let other = parseFloat(document.getElementById('other').value) || 0;
-        let profitMargin = parseFloat(document.getElementById('profitMargin').value) || 0;
+        const price = parseFloat(document.getElementById('price').value) || 0;
+        const quantity = parseFloat(document.getElementById('quantity').value) || 1;
+        const delivery = parseFloat(document.getElementById('delivery').value) || 0;
+        const other = parseFloat(document.getElementById('other').value) || 0;
+        const profitMargin = parseFloat(document.getElementById('profitMargin').value) || 0;
 
-        let totalGoods = price * quantity;
-        let totalExpenses = delivery + other;
-        let totalCost = totalGoods + totalExpenses;
-        let actualUnitCost = totalCost / quantity;
-        let finalSellingPrice = actualUnitCost * (1 + (profitMargin / 100));
-        let unitProfit = finalSellingPrice - actualUnitCost;
-        let totalProfit = unitProfit * quantity;
+        const totalGoods = price * quantity;
+        const totalExpenses = delivery + other;
+        const totalCost = totalGoods + totalExpenses;
+        const actualUnitCost = totalCost / quantity;
+        const finalSellingPrice = actualUnitCost * (1 + (profitMargin / 100));
+        const unitProfit = finalSellingPrice - actualUnitCost;
+        const totalProfit = unitProfit * quantity;
 
-        document.getElementById('resTotalCost').innerText = totalCost.toLocaleString();
+        document.getElementById('resTotalCost').innerText = totalCost.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2});
         document.getElementById('resUnitCost').innerText = actualUnitCost.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         document.getElementById('resFinalPrice').innerText = finalSellingPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         document.getElementById('resUnitProfit').innerText = unitProfit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
