@@ -114,12 +114,7 @@
             text-align: center;
             font-size: 13px;
             color: var(--hint-color);
-        }
-
-        .footer-sponsor a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -164,7 +159,7 @@
     </div>
 
     <div class="footer-sponsor">
-        برعاية: <a href=>@AbuObeidaFeeds</a>
+        برعاية @AbuObeidaFeeds
     </div>
 </div>
 
@@ -175,17 +170,6 @@
         tg.ready();
         tg.expand();
     }
-
-    // فتح رابط القناة عبر تليجرام مباشرة بشكل آمن
-    document.getElementById('sponsorLink').addEventListener('click', function(e) {
-        e.preventDefault();
-        const channelUrl = 'https://t.me/AbuObeidaFeeds';
-        if (tg && tg.openTelegramLink) {
-            tg.openTelegramLink(channelUrl);
-        } else {
-            window.open(channelUrl, '_blank');
-        }
-    });
 
     function calculate() {
         const price = parseFloat(document.getElementById('price').value) || 0;
