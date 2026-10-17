@@ -70,6 +70,22 @@
         .result p {
             margin: 6px 0;
         }
+        .footer-sponsor {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed #ccc;
+            text-align: center;
+            font-size: 13px;
+            color: var(--tg-theme-hint-color, #666);
+        }
+        .footer-sponsor a {
+            color: var(--tg-theme-link-color, #2481cc);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .footer-sponsor a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -78,12 +94,12 @@
     <h2>حاسبة التسعير التجارية</h2>
     
     <div class="form-group">
-        <label>سعر شراء الوحدة / الطن:</label>
+        <label>سعر شراء الوحدة:</label>
         <input type="number" id="price" placeholder="أدخل السعر">
     </div>
 
     <div class="form-group">
-        <label>الكمية الإجمالية:</label>
+        <label>الكمية:</label>
         <input type="number" id="quantity" placeholder="أدخل الكمية">
     </div>
 
@@ -102,20 +118,31 @@
         <input type="number" id="profitMargin" placeholder="مثال: 15">
     </div>
 
-    <button onclick="calculate()">احساب التكلفة والسعر النهائي</button>
+    <button onclick="calculate()">حساب التكلفة والسعر النهائي</button>
 
     <div class="result" id="resultBox">
         <p>• إجمالي التكلفة الشاملة: <strong id="resTotalCost">0</strong></p>
-        <p>• التكلفة الفعلية للوحدة/الطن: <strong id="resUnitCost">0</strong></p>
+        <p>• التكلفة الفعلية للوحدة: <strong id="resUnitCost">0</strong></p>
         <p>• 💰 <strong>سعر البيع النهائي:</strong> <strong id="resFinalPrice" style="color: #2481cc;">0</strong></p>
         <p>• ربح الوحدة الواحدة: <strong id="resUnitProfit">0</strong></p>
-        <p>• إجمالي الربح المتوقع: <strong id="resTotalProfit">0</strong></p>
+        <p>• إجمالي الربح المتوقع للكمية: <strong id="resTotalProfit">0</strong></p>
+    </div>
+
+    <div class="footer-sponsor">
+        برعاية: <a href="https://t.me/AbuObeidaFeeds" target="_blank" onclick="openLink(event, 'https://t.me/AbuObeidaFeeds')">@AbuObeidaFeeds</a>
     </div>
 </div>
 
 <script>
     let tg = window.Telegram.WebApp;
     tg.expand();
+
+    function openLink(event, url) {
+        if (tg && tg.openTelegramLink) {
+            event.preventDefault();
+            tg.openTelegramLink(url);
+        }
+    }
 
     function calculate() {
         let price = parseFloat(document.getElementById('price').value) || 0;
