@@ -8,6 +8,7 @@
     <title>الحاسبة التجارية</title>
     <link rel="preconnect" href="https://telegram.org" crossorigin>
     <link rel="dns-prefetch" href="https://telegram.org">
+    <!-- async: لا يحجب العرض أبداً -->
     <script src="https://telegram.org/js/telegram-web-app.js" async></script>
     <style>
         *,*::before,*::after{box-sizing:border-box}
@@ -52,10 +53,7 @@
             margin-top:20px;padding-top:15px;border-top:1px dashed #ccc;
             text-align:center;font-size:13px;color:var(--tg-theme-hint-color,#666);
         }
-        .footer-sponsor .name{
-            color:var(--tg-theme-text-color,#222);
-            font-weight:700;
-        }
+        .footer-sponsor a{color:var(--tg-theme-link-color,#2481cc);text-decoration:none;font-weight:700}
         .error{
             display:none;color:#e53935;font-size:14px;padding:8px;
             background:rgba(229,57,53,.1);border-radius:8px;
@@ -103,7 +101,7 @@
     </div>
 
     <div class="footer-sponsor">
-        برعاية: <span class="name">AbuObeida Feeds</span>
+        برعاية: <a id="sponsorLink" href="https://t.me/AbuObeidaFeeds" target="_blank" rel="noopener noreferrer">@AbuObeidaFeeds</a>
     </div>
 </div>
 
@@ -122,6 +120,7 @@
         profitMargin: $('profitMargin'),
         resultBox: $('resultBox'),
         errorMsg: $('errorMsg'),
+        sponsorLink: $('sponsorLink'),
         out: {
             totalCost: $('resTotalCost'),
             unitCost: $('resUnitCost'),
@@ -184,22 +183,30 @@
         els.resultBox.hidden = false;
     }
 
-    /* ---------- 6) ربط الأحداث ---------- */
+    /* ---------- 6) ربط الأحداث (بدون inline onclick) ---------- */
     els.form.addEventListener('submit', calculate);
 
-    /* ---------- 7) تهيئة تيليجرام مع إعادة محاولة ---------- */
+    els.sponsorLink.addEventListener('click', function (e) {
+        const tg = window.Telegram && window.Telegram.WebApp;
+        if (tg && typeof tg.openTelegramLink === 'function') {
+            e.preventDefault();
+            try { tg.openTelegramLink('https://t.me/AbuObeidaFeeds'); } catch (_) {}
+        }
+    });
+
+    /* ---------- 7) تهيئة تيليجرام مع إعادة محاولة (لأن السكربت async) ---------- */
     let tgInit = false;
     function initTelegram() {
         const tg = window.Telegram && window.Telegram.WebApp;
         if (!tg || tgInit) return !!tg;
         tgInit = true;
         try {
-            if (typeof tg.ready === 'function')                 tg.ready();
-            if (typeof tg.expand === 'function')                tg.expand();
+            if (typeof tg.ready === 'function')                tg.ready();
+            if (typeof tg.expand === 'function')               tg.expand();
             if (typeof tg.disableVerticalSwipes === 'function') tg.disableVerticalSwipes();
-            if (typeof tg.setHeaderColor === 'function')        tg.setHeaderColor('secondary_bg_color');
-            if (typeof tg.setBackgroundColor === 'function')    tg.setBackgroundColor('bg_color');
-        } catch (_) { /* تجاهل أخطاء النسخ القديمة */ }
+            if (typeof tg.setHeaderColor === 'function')       tg.setHeaderColor('secondary_bg_color');
+            if (typeof tg.setBackgroundColor === 'function')   tg.setBackgroundColor('bg_color');
+        } catch (_) { /* تجاهل أي خطأ في نسخ تيليجرام القديمة */ }
         return true;
     }
 
